@@ -1,0 +1,7 @@
+{
+  "name": "TippingSite",
+  "version": "1.0.0",
+  "dependencies": {
+    "mariadb": "^3.0.2"
+  }
+}
