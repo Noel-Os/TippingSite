@@ -31,3 +31,22 @@
           </div>
       </div>
   </section>
+
+
+
+ <table>
+         <thead>
+             <th id="team1"></th>
+             <th id="team2"></th>
+         </thead>
+         <tbody>
+             <tr>
+                 <td><input id="betTeam1" type="number"></td>
+                 <td><input id="betTeam2" type="number"></td>
+             </tr>
+             <tr>
+                 <td><button onclick="betTeam1()">Bet</button></td>
+                 <td><button onclick="betTeam2()">Bet</button></td>
+             </tr>
+         </tbody>
+     </table>

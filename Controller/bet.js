@@ -1,20 +1,78 @@
 
 function loadBet(){
+
+    if (getCookie("session") === "0"){
+        window.location.href = "../Views/index.html";
+    }
+
     const url='http://localhost:8080/bet?id=' + window.location.search.substring(1).split("=")[1];
+    let str = '';
 
     fetch(url)
-        .then(response => response.json())
-        .then((responseData) =>
-        {
-            document.getElementById('team1').innerHTML = responseData[0]["team1"];
-            document.getElementById('team2').innerHTML = responseData[0]["team2"];
-        });
+    .then(response => response.json())
+    .then((responseData) =>
+    {
+        str+=
+        `
+            <option value="team1">` + responseData[0]["team1"] + `</option>
+            <option value="team2">` + responseData[0]["team2"] + `</option>
+        `
+        document.getElementById('teamSelection').innerHTML = document.getElementById('teamSelection').innerHTML + str;
+    });
 }
 
-function betTeam1(){
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+function bet(){
+
+    const url='http://localhost:8080/createBetting';
+
+    let amount = document.getElementById("amount").value;
+    let uid = getCookie("session");
+    let bet_id = window.location.href.substring(window.location.href.lastIndexOf("=") + 1);
+    let team = document.getElementById("teamSelection").value;;
+
+    fetch(url, {
+        method: "POST",
+        headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            amount: amount,
+            uid: uid,
+            bet_id: bet_id,
+            team: team
+        }),
+    })
+    .then(response => response.json())
+    .then((data) =>
+    {
+        console.log(data);
+        if (data.error) {
+            alert("Error setting up bet"); /*displays error message*/
+        } else {
+            alert("Bet set");
+        }
+    });
 
 }
 
-function betTeam2(){
-
+function logout(){
+    document.cookie="session=0"
+    document.location.href = "../Views/index.html";
 }

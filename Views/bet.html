@@ -12,22 +12,69 @@
 
 </head>
 <body onload="loadBet()">
-    <h1>Bet</h1>
-    <table>
-        <thead>
-            <th id="team1"></th>
-            <th id="team2"></th>
-        </thead>
-        <tbody>
-            <tr>
-                <td><input id="betTeam1" type="number"></td>
-                <td><input id="betTeam2" type="number"></td>
-            </tr>
-            <tr>
-                <td><button onclick="betTeam1()">Bet</button></td>
-                <td><button onclick="betTeam2()">Bet</button></td>
-            </tr>
-        </tbody>
-    </table>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="overview.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="YourBets.html">Your Bets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="logout()">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<section class="vh-100 background">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+
+                        <div class="text-center mb-4">
+                            <h1>Bet</h1>
+                        </div>
+
+                        <div class="d-flex justify-content-center mb-4">
+                            <select id="teamSelection" class="form-select" aria-label="Default select example">
+                                <option selected>Select your team</option>
+                            </select>
+                        </div>
+
+                        <div class="d-flex justify-content-center mb-4">
+                            <input placeholder="amount" type="number" id="amount" class="form-select" aria-label="Default select example"></input>
+                        </div>
+
+                        <div class="d-flex justify-content-center">
+                            <button onclick="bet()" class="btn btn-outline-light btn-lg px-5">Submit Bet</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<footer class="py-3 my-4">
+    <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pricing</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+    </ul>
+    <p class="text-center text-muted">© 2022 Company, Inc</p>
+</footer>
 </body>
 </html>
