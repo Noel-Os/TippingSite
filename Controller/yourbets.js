@@ -27,7 +27,8 @@ function loadMyBets(){
             str += `
             <tr>
                 <th scope="row">` + response["betting_id"] + `</th>
-                <td>` + response["bet_for"] + `</td>
+                <td>Barcelona</td>
+                <td>Real Madrid</td>
                 <td>` + response["amount"] + `</td>
                 <td>` + response["status"] + `</td>
                 <td>` + amountWon + `</td>

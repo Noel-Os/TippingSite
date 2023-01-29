@@ -12,12 +12,8 @@ function loadBet(){
     .then(response => response.json())
     .then((responseData) =>
     {
-        str+=
-        `
-            <option value="team1">` + responseData[0]["team1"] + `</option>
-            <option value="team2">` + responseData[0]["team2"] + `</option>
-        `
-        document.getElementById('teamSelection').innerHTML = document.getElementById('teamSelection').innerHTML + str;
+        document.getElementById('teamAName').innerHTML = responseData[0]["team1"];
+        document.getElementById('teamBName').innerHTML = responseData[0]["team2"];
     });
 }
 

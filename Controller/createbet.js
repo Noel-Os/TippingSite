@@ -3,7 +3,7 @@ function onLoad(){
     if (getCookie("session") === "0"){
         window.location.href = "../Views/index.html";
     }
-}
+}-
 
 function logout(){
     document.cookie="session=0"
