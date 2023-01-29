@@ -19,19 +19,15 @@ function loadMyBets(){
     .then((responseData) =>
     {
         responseData.forEach(response =>{
-            let amountWon;
-            if(response["bet_for"] === response["winner"]) {amountWon = response["amount"] * 2}
-            else if (response["winner"] === null) {amountWon = "-"}
-            else {amountWon = response["amount"] * -1}
-
             str += `
             <tr>
                 <th scope="row">` + response["betting_id"] + `</th>
-                <td>Barcelona</td>
-                <td>Real Madrid</td>
+                <td>` + response["bet"]["teamA"] + ` :  ` + response["bet"]["teamB"]["points"] + `</td>
+                <td>` + response["bet"]["teamB"] + ` :  ` + response["bet"]["teamB"]["points"] + `</td>
+                <td>` + response["game"]["teamA"] + ` :  ` + response["game"]["teamB"]["points"] + `</td>
+                <td>` + response["game"]["teamB"] + ` :  ` + response["game"]["teamB"]["points"] + `</td>
                 <td>` + response["amount"] + `</td>
                 <td>` + response["status"] + `</td>
-                <td>` + amountWon + `</td>
             </tr>        `
         });
         document.getElementById('bets').innerHTML = str;
