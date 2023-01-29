@@ -1,12 +1,7 @@
 
 function loadBet(){
 
-    if (getCookie("session") === "0"){
-        window.location.href = "../Views/index.html";
-    }
-
     const url='http://localhost:8080/bet?id=' + window.location.search.substring(1).split("=")[1];
-    let str = '';
 
     fetch(url)
     .then(response => response.json())
@@ -15,6 +10,25 @@ function loadBet(){
         document.getElementById('teamAName').innerHTML = responseData[0]["team1"];
         document.getElementById('teamBName').innerHTML = responseData[0]["team2"];
     });
+
+    CheckAlreadyBet()
+}
+
+function CheckAlreadyBet(){
+    const url='http://localhost:8080/bet?id=' + window.location.search.substring(1).split("=")[1];
+
+    fetch(url)
+        .then(response => response.json())
+        .then((responseData) =>
+        {
+            if (responseData["user"]["bet"] > 0){
+                document.getElementById('pointsA').innerHTML = responseData[0]["user"]["bet"]["teamA"];
+                document.getElementById('pointsB').innerHTML = responseData[0]["user"]["bet"]["teamB"];
+                document.getElementById("pointsA").setAttribute("disabled", "");
+                document.getElementById("pointsB").setAttribute("disabled", "");
+                document.getElementById("submitBet").setAttribute("disabled", "");
+            }
+        });
 }
 
 function getCookie(cname) {
