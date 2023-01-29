@@ -23,11 +23,12 @@ function loadBets(){
             str += `
             <div class="col">
                 <div class="card">
-                    <img src="https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png" class="card-img-top" alt="...">
                     <div class="card-body p-5 text-center bg-light text-dark">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="bet.html?id=` + responseData[i]["bet_id"] + `" class="btn btn-primary">Go somewhere</a>
+                        <h5 class="card-title">`+responseData[i]["category"]+`</h5>
+                        <p class="card-text">Team 1: `+responseData[i]["team1"]+`</p>
+                        <p class="card-text">VS.</p>
+                        <p class="card-text">Team 2: `+responseData[i]["team2"]+`</p>
+                        <a href="bet.html?id=` + responseData[i]["bet_id"] + `" class="btn btn-primary">Bet</a>
                     </div>
                 </div>
             </div>`;
