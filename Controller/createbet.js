@@ -1,46 +1,34 @@
-
-function onLoad(){
-    if (getCookie("session") === "0"){
-        window.location.href = "../Views/index.html";
-    }
-}-
-
-function logout(){
-    document.cookie="session=0"
-    document.location.href = "../Views/index.html";
-}
-
 function createBet(){
-    const url='http://localhost:8080/createBet';
 
     let cat = document.getElementById("category").value;
     let t1 = document.getElementById("team1").value
     let t2 = document.getElementById("team2").value
-    let start = document.getElementById("startTime").value;;
+    let start = document.getElementById("startTime").value;
 
-    fetch(url, {
-        method: "POST",
-        headers: {
-            Accept: "application/json, text/plain, */*",
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            cat: cat,
-            t1: t1,
-            t2: t2,
-            start: start
-        }),
-    })
-        .then(response => response.json())
-        .then((data) =>
-        {
-            console.log(data);
-            if (data.error) {
-                alert("Error creating bet"); /*displays error message*/
-            } else {
-                alert("Bet created");
-            }
-        });
+    var myHeaders = new Headers();
+    myHeaders.append("key", getCookie("camundaKey"));
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+        "teamA": t1,
+        "teamB": t2,
+        "date": start,
+        "sport": cat
+    });
+
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+
+    fetch("http://localhost:8081/game", requestOptions)
+        .then(response => response.text())
+        .then(result => {
+            document.location.href = "../Views/overview.html";
+        })
+        .catch(error => console.log('error', error));
 }
 
 function getCookie(cname) {

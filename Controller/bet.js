@@ -1,34 +1,51 @@
 
 function loadBet(){
-
-    const url='http://localhost:8080/bet?id=' + window.location.search.substring(1).split("=")[1];
-
-    fetch(url)
-    .then(response => response.json())
-    .then((responseData) =>
-    {
-        document.getElementById('teamAName').innerHTML = responseData[0]["team1"];
-        document.getElementById('teamBName').innerHTML = responseData[0]["team2"];
-    });
-
+    if (getCookie("session") === "0"){
+        window.location.href = "../Views/index.html";
+    }
     CheckAlreadyBet()
+
+    var myHeaders = new Headers();
+    myHeaders.append("key", getCookie("camundaKey"));
+
+    var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+    };
+
+    fetch("http://localhost:8081/game/" + window.location.search.substring(1).split("=")[1], requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            document.getElementById('teamAName').innerHTML = result["teamA"];
+            document.getElementById('teamBName').innerHTML = result["teamB"];
+        })
+        .catch(error => console.log('error', error));
 }
 
 function CheckAlreadyBet(){
-    const url='http://localhost:8080/bet?id=' + window.location.search.substring(1).split("=")[1];
+    var myHeaders = new Headers();
+    myHeaders.append("key", getCookie("camundaKey"));
 
-    fetch(url)
+    var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+    };
+
+    fetch("http://localhost:8081/bet/" + window.location.search.substring(1).split("=")[1], requestOptions)
         .then(response => response.json())
-        .then((responseData) =>
-        {
-            if (responseData["user"]["bet"] > 0){
-                document.getElementById('pointsA').innerHTML = responseData[0]["user"]["bet"]["teamA"];
-                document.getElementById('pointsB').innerHTML = responseData[0]["user"]["bet"]["teamB"];
+        .then(responseData => {
+            if (responseData["id"] !== null) {
+                console.log(responseData)
+                document.getElementById('pointsA').setAttribute("placeholder", responseData["teamA"]);
+                document.getElementById('pointsB').setAttribute("placeholder", responseData["teamB"]);
                 document.getElementById("pointsA").setAttribute("disabled", "");
                 document.getElementById("pointsB").setAttribute("disabled", "");
                 document.getElementById("submitBet").setAttribute("disabled", "");
             }
-        });
+        })
+        .catch(error => console.log('error', error));
 }
 
 function getCookie(cname) {
@@ -49,37 +66,32 @@ function getCookie(cname) {
 
 function bet(){
 
-    const url='http://localhost:8080/createBetting';
+    let pointsA = document.getElementById("pointsA").value
+    let pointsB = document.getElementById("pointsB").value
 
-    let amount = document.getElementById("amount").value;
-    let uid = getCookie("session");
-    let bet_id = window.location.href.substring(window.location.href.lastIndexOf("=") + 1);
-    let team = document.getElementById("teamSelection").value;;
+    var myHeaders = new Headers();
+    myHeaders.append("key", getCookie("camundaKey"));
+    myHeaders.append("Content-Type", "application/json");
 
-    fetch(url, {
-        method: "POST",
-        headers: {
-            Accept: "application/json, text/plain, */*",
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            amount: amount,
-            uid: uid,
-            bet_id: bet_id,
-            team: team
-        }),
-    })
-    .then(response => response.json())
-    .then((data) =>
-    {
-        console.log(data);
-        if (data.error) {
-            alert("Error setting up bet"); /*displays error message*/
-        } else {
-            alert("Bet set");
-        }
+    var raw = JSON.stringify({
+        "teamA": pointsA,
+        "teamB": pointsB,
+        "gameId": window.location.search.substring(1).split("=")[1]
     });
 
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+
+    fetch("http://localhost:8081/bet", requestOptions)
+        .then(response => response.text())
+        .then(result => {
+            document.location.href = "../Views/overview.html";
+        })
+        .catch(error => console.log('error', error));
 }
 
 function logout(){

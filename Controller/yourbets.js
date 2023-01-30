@@ -6,32 +6,39 @@ function logout(){
 
 function loadMyBets(){
 
-    if (getCookie("session") === "0"){
+    /*if (getCookie("session") === "0"){
         window.location.href = "../Views/index.html";
-    }
-
-    const url='http://localhost:8080/bettings?uid=' + getCookie("session");
+    }*/
 
     var str = ''
 
-    fetch(url)
-    .then(response => response.json())
-    .then((responseData) =>
-    {
-        responseData.forEach(response =>{
-            str += `
-            <tr>
-                <th scope="row">` + response["betting_id"] + `</th>
-                <td>` + response["bet"]["teamA"] + ` :  ` + response["bet"]["teamB"]["points"] + `</td>
-                <td>` + response["bet"]["teamB"] + ` :  ` + response["bet"]["teamB"]["points"] + `</td>
-                <td>` + response["game"]["teamA"] + ` :  ` + response["game"]["teamB"]["points"] + `</td>
-                <td>` + response["game"]["teamB"] + ` :  ` + response["game"]["teamB"]["points"] + `</td>
-                <td>` + response["amount"] + `</td>
-                <td>` + response["status"] + `</td>
-            </tr>        `
-        });
-        document.getElementById('bets').innerHTML = str;
-    });
+    var myHeaders = new Headers();
+    myHeaders.append("key", getCookie("camundaKey"));
+
+    var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+    };
+
+
+    fetch("http://localhost:8081/bet", requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            result.forEach(response =>{
+                var done = response["game"]["done"] ? "Done":"Due"
+                str += `
+                <tr>
+                    <td>` + response["game"]["teamA"] + ` :  ` + response["teamA"] + `</td>
+                    <td>` + response["game"]["teamB"] + ` :  ` + response["teamB"] + `</td>
+                    <td>` + response["game"]["teamA"] + ` :  ` + response["game"]["scoreTeamA"] + `</td>
+                    <td>` + response["game"]["teamB"] + ` :  ` + response["game"]["scoreTeamB"] + `</td>
+                    <td>` + done + `</td>
+                </tr>        `
+            });
+            document.getElementById('bets').innerHTML = str;
+        })
+        .catch(error => console.log('error', error));
 }
 
 function getCookie(cname) {

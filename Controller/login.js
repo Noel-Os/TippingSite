@@ -1,24 +1,59 @@
+var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+};
+
+fetch("http://localhost:8081/id", requestOptions)
+    .then(response => response.text())
+    .then(result => {
+        document.cookie = "camundaKey=" + result
+    })
+    .catch(error => console.log('error', error));
 
 function login() {
     let username = document.getElementById("typeUsernameX").value;
     let password = document.getElementById("typePasswordX").value;
 
-    const url='http://localhost:8080/login?username=' + username + '&password=' + password;
+    var myHeaders = new Headers();
+    myHeaders.append("key", getCookie("camundaKey"));
+    myHeaders.append("Content-Type", "application/json");
 
-    fetch(url)
-    .then(response => response.json())
-    .then((responseData) => {
-
-        if (responseData.length > 0){
-            const d = new Date();
-            d.setTime(d.getTime() + (20*60*1000));
-            document.cookie="session=" + responseData[0]["user_id"];
-            document.cookie="expires=" + d;
-            document.cookie="path=/";
-            document.location.href = "../Views/overview.html";
-        }
-        else {
-            document.getElementById("wrongCred").innerHTML = "Username und Passwort stimmen nicht überein";
-        }
+    var raw = JSON.stringify({
+        "username": username,
+        "password": password
     });
+
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+
+    fetch("http://localhost:8081/user", requestOptions)
+        .then(response => response.text())
+        .then(result => {
+            if (result === "Success"){
+                document.location.href = "../Views/overview.html";
+            } else {
+                document.getElementById("wrongCred").innerHTML = "Username und Passwort stimmen nicht überein";
+            }
+        })
+        .catch(error => console.log('error', error));
+}
+
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
 }

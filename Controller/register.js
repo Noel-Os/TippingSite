@@ -1,26 +1,28 @@
 function registerUser(){
+    var myHeaders = new Headers();
+    myHeaders.append("key", "3c394215-9ff6-11ed-9e4a-02420ace91ac");
+    myHeaders.append("Content-Type", "application/json");
 
-    const url='http://localhost:8080/register';
-
-    fetch(url, {
-        method: "POST",
-        headers: {
-            Accept: "application/json, text/plain, */*",
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            username: document.getElementById("typeUsername").value,
-            password: document.getElementById("typePassword").value,
-        }),
-    })
-    .then(response => response.json())
-    .then((data) =>
-    {
-        console.log(data);
-        if (data.error) {
-            alert("Error Password or Username"); /*displays error message*/
-        } else {
-            window.location.href = "../Views/index.html";
-        }
+    var raw = JSON.stringify({
+        "username": document.getElementById("typeUsername").value,
+        "password": document.getElementById("typePassword").value,
     });
+
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+
+    fetch("localhost:8081/user/register", requestOptions)
+        .then(response => response.text())
+        .then(result => {
+            if (result.error) {
+                alert("Error Password or Username"); /*displays error message*/
+            } else {
+                window.location.href = "../Views/index.html";
+            }
+        })
+        .catch(error => console.log('error', error));
 }
